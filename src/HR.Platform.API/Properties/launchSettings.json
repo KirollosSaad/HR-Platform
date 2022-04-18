@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:41147",
+      "sslPort": 44361
+    }
+  },
+  "profiles": {
+    "HR.Platform.API": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "UseInMemoryDatabase": "false",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "GOOGLE_CLIENT_ID": "979649450399-4sv7qhjfq7lri9ggj188sr5mc9i8h9uo.apps.googleusercontent.com",
+        "GOOGLE_CLIENT_SECRET": "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",
+        "FRONTEND_URL": "https://localhost:5001/account/test"
+      },
+      "applicationUrl": "https://localhost:5001;http://localhost:5000",
+      "dotnetRunMessages": true
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "UseInMemoryDatabase": "false",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "GOOGLE_CLIENT_ID": "979649450399-4sv7qhjfq7lri9ggj188sr5mc9i8h9uo.apps.googleusercontent.com",
+        "GOOGLE_CLIENT_SECRET": "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",
+        "FRONTEND_URL": "https://localhost:5001/account/test"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "publishAllPorts": true,
+      "useSSL": true,
+      "environmentVariables": {
+        "UseInMemoryDatabase": "false",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "GOOGLE_CLIENT_ID": "979649450399-4sv7qhjfq7lri9ggj188sr5mc9i8h9uo.apps.googleusercontent.com",
+        "GOOGLE_CLIENT_SECRET": "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",
+        "FRONTEND_URL": "https://localhost:5001/account/test"
+      }
+    }
+  }
+}
