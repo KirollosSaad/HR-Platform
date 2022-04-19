@@ -2,7 +2,7 @@
 
 namespace HR.Platform.Domain.Entities
 {
-    public class RecruitmentTest : EntityBase, IAuditableEntity
+    public class RecruitmentTest : EntityBase, IAuditableEntity, IEvaluatableEntity
     {
         public string Name { get; set; }
         public int MaxScore { get; set; }
@@ -22,8 +22,7 @@ namespace HR.Platform.Domain.Entities
         public string UpdatedById { get; set; }
         public string DeletedById { get; set; }
 
-        public virtual User CreatedBy { get; set; }
-        public virtual User UpdatedBy { get; set; }
-        public virtual User DeletedBy { get; set; }
+        public DateTime? EvaluatedAt { get; set; }
+        public string EvaluatedById { get; set; }
     }
 }

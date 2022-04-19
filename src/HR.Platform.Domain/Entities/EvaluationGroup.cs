@@ -12,9 +12,5 @@ namespace HR.Platform.Domain.Entities
         public string CreatedById { get; set; }
         public string UpdatedById { get; set; }
         public string DeletedById { get; set; }
-
-        public virtual User CreatedBy { get; set; }
-        public virtual User UpdatedBy { get; set; }
-        public virtual User DeletedBy { get; set; }
     }
 }
