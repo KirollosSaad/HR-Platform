@@ -1,14 +1,14 @@
 ﻿using HR.Platform.Application.DIExtensions;
 using HR.Platform.Infrastructure.DIExtensions;
-using HR.Platform.Application.Models.Results;
 using HR.Platform.Application.Constants;
 using HR.Platform.Application.Common.Filters;
 using HR.Platform.Application.BusinessLogic.Users.Commands.UpsertUser;
+using HR.Platform.API.Extensions;
 
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication;
 
 using FluentValidation.AspNetCore;
 using System.Security.Claims;
@@ -34,7 +34,11 @@ namespace HR.Platform.API
             {
                 options.AddPolicy(name: Configurations.CORSPolicy, builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                    builder
+                    .WithOrigins(Environment.GetEnvironmentVariable(Configurations.FrontendURL))
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
                 });
             });
 
@@ -48,12 +52,7 @@ namespace HR.Platform.API
             })
             .ConfigureApiBehaviorOptions(options =>
             {
-                options.InvalidModelStateResponseFactory = context =>
-                {
-                    var result = context.ModelState
-                    .Select(x => new InvalidRequestResult(x.Key, x.Value.Errors.Select(x => x.ErrorMessage)));
-                    return new BadRequestObjectResult(result);
-                };
+                options.InvalidModelStateResponseFactory = context => context.HandleInvalidRequest();
             });
 
             services.AddEndpointsApiExplorer();
@@ -76,41 +75,10 @@ namespace HR.Platform.API
             {
                 options.ClientId = Environment.GetEnvironmentVariable(Configurations.GoogleClientId);
                 options.ClientSecret = Environment.GetEnvironmentVariable(Configurations.GoogleClientSecret);
-                options.CallbackPath = "/api/signin-google";
+                options.CallbackPath = Environment.GetEnvironmentVariable(Configurations.GoogleCallbackPath);
                 options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.CorrelationCookie.SameSite = SameSiteMode.None;
-                options.Scope.Add("profile");
-                options.Events.OnTicketReceived = async (context) =>
-                {
-                    var email = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
-                    var name = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
-                    var sender = context.HttpContext.RequestServices.GetRequiredService<ISender>();
-
-                    var response = await sender.Send(new UpsertUserCommand
-                    {
-                        Email = email,
-                        Name = name,
-                        ExternalProvider = GoogleDefaults.AuthenticationScheme
-                    });
-
-                    if (response.IsActive)
-                    {
-                        var claimsIdentity = (ClaimsIdentity)context.Principal.Identity;
-                        var existingIdentityClaim = claimsIdentity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-
-                        if (existingIdentityClaim != null)
-                        {
-                            claimsIdentity.TryRemoveClaim(existingIdentityClaim);
-                        }
-
-                        claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, response.UserId));
-                    }
-                    else
-                    {
-                        context.Response.Redirect($"{Environment.GetEnvironmentVariable(Configurations.FrontendURL)}/login");
-                        context.HandleResponse();
-                    }
-                };
+                options.Events.OnTicketReceived = async context => await HandleTicketReceivedAsync(context);
             })
             .AddJwtBearer();
         }
@@ -145,6 +113,37 @@ namespace HR.Platform.API
                     pattern: "{controller}/{action=Index}/{id?}");
             });
         }
-    }
 
+        private async Task HandleTicketReceivedAsync(TicketReceivedContext context)
+        {
+            var email = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+            var name = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+            var sender = context.HttpContext.RequestServices.GetRequiredService<ISender>();
+
+            var response = await sender.Send(new UpsertUserCommand
+            {
+                Email = email,
+                Name = name,
+                ExternalProvider = GoogleDefaults.AuthenticationScheme
+            });
+
+            if (response.IsActive)
+            {
+                var claimsIdentity = (ClaimsIdentity)context.Principal.Identity;
+                var existingIdentityClaim = claimsIdentity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+
+                if (existingIdentityClaim != null)
+                {
+                    claimsIdentity.TryRemoveClaim(existingIdentityClaim);
+                }
+
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, response.UserId));
+            }
+            else
+            {
+                context.Response.Redirect($"{Environment.GetEnvironmentVariable(Configurations.FrontendURL)}/login");
+                context.HandleResponse();
+            }
+        }
+    }
 }

@@ -6,5 +6,6 @@
         public const string GoogleClientSecret = "GOOGLE_CLIENT_SECRET";
         public const string CORSPolicy = "CORS_Policy";
         public const string FrontendURL = "FRONTEND_URL";
+        public const string GoogleCallbackPath = "GOOGLE_CALLBACK_PATH";
     }
 }

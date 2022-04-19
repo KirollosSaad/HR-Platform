@@ -18,7 +18,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "GOOGLE_CLIENT_ID": "979649450399-4sv7qhjfq7lri9ggj188sr5mc9i8h9uo.apps.googleusercontent.com",
         "GOOGLE_CLIENT_SECRET": "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",
-        "FRONTEND_URL": "https://localhost:5001/account/test"
+        "FRONTEND_URL": "http://localhost:3000",
+        "GOOGLE_CALLBACK_PATH": "/api/signin-google"
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "dotnetRunMessages": true
@@ -32,7 +33,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "GOOGLE_CLIENT_ID": "979649450399-4sv7qhjfq7lri9ggj188sr5mc9i8h9uo.apps.googleusercontent.com",
         "GOOGLE_CLIENT_SECRET": "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",
-        "FRONTEND_URL": "https://localhost:5001/account/test"
+        "FRONTEND_URL": "http://localhost:3000",
+        "GOOGLE_CALLBACK_PATH": "/api/signin-google"
       }
     },
     "Docker": {
@@ -46,7 +48,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "GOOGLE_CLIENT_ID": "979649450399-4sv7qhjfq7lri9ggj188sr5mc9i8h9uo.apps.googleusercontent.com",
         "GOOGLE_CLIENT_SECRET": "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",
-        "FRONTEND_URL": "https://localhost:5001/account/test"
+        "FRONTEND_URL": "http://localhost:3000",
+        "GOOGLE_CALLBACK_PATH": "/api/signin-google"
       }
     }
   }
