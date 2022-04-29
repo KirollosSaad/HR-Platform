@@ -6,7 +6,8 @@ namespace HR.Platform.Domain.Entities
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public Dictionary<string, int> StepsIds { get; set; }
+        public virtual ICollection<RecruitmentTest> Tests { get; set; }
+        public virtual ICollection<RecruitmentInterview> Interviews { get; set; }
 
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
@@ -15,8 +16,10 @@ namespace HR.Platform.Domain.Entities
         public string UpdatedById { get; set; }
         public string DeletedById { get; set; }
 
-        public virtual User CreatedBy { get; set; }
-        public virtual User UpdatedBy { get; set; }
-        public virtual User DeletedBy { get; set; }
+        public RecruitmentProcess()
+        {
+            Tests = new HashSet<RecruitmentTest>();
+            Interviews = new HashSet<RecruitmentInterview>();
+        }
     }
 }

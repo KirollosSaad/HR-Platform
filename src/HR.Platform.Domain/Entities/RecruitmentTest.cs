@@ -2,17 +2,19 @@
 
 namespace HR.Platform.Domain.Entities
 {
-    public class RecruitmentTest : EntityBase, IAuditableEntity, IEvaluatableEntity
+    public class RecruitmentTest : EntityBase, IAuditableEntity, IEvaluatableEntity, IPrioritizableEntity
     {
+        public string ProcessId { get; set; }
         public string Name { get; set; }
         public int MaxScore { get; set; }
-        public double Score { get; set; }
+        public double? Score { get; set; }
         public int AcceptanceScore { get; set; }
 
         public string URL { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public int Duration { get; set; }
+        public int? Duration { get; set; }
+        public int Priority { get; set; }
         public string Notes { get; set; }
 
         public DateTime? CreatedAt { get; set; }
@@ -24,5 +26,7 @@ namespace HR.Platform.Domain.Entities
 
         public DateTime? EvaluatedAt { get; set; }
         public string EvaluatedById { get; set; }
+
+        public virtual RecruitmentProcess Process { get; set; }
     }
 }

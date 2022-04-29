@@ -2,9 +2,11 @@
 
 namespace HR.Platform.Domain.Entities
 {
-    public class RecruitmentInterview : EntityBase, IAuditableEntity
+    public class RecruitmentInterview : EntityBase, IAuditableEntity, IPrioritizableEntity
     {
+        public string ProcessId { get; set; }
         public string Name { get; set; }
+        public int Priority { get; set; }
         public List<EvaluationCriteria> Evaluation { get; set; }
 
         public DateTime? CreatedAt { get; set; }
@@ -14,5 +16,7 @@ namespace HR.Platform.Domain.Entities
         public string CreatedById { get; set; }
         public string UpdatedById { get; set; }
         public string DeletedById { get; set; }
+
+        public virtual RecruitmentProcess Process { get; set; }
     }
 }

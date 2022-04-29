@@ -15,13 +15,16 @@ namespace HR.Platform.Infrastructure.Persistence
     {
         private readonly ISystemClock _systemClock;
 
+        public DbSet<Applicant> Applicants => Set<Applicant>();
+        public DbSet<User> Users => Set<User>();
+        public DbSet<EvaluationCriteria> Evaluation => Set<EvaluationCriteria>();
+        public DbSet<EvaluationGroup> EvaluationGroups => Set<EvaluationGroup>();
+        public DbSet<RecruitmentInterview> RecruitmentInterviews => Set<RecruitmentInterview>();
+
         public HRDBContext(ISystemClock systemClock, DbContextOptions<HRDBContext> options) : base(options)
         {
             _systemClock = systemClock ?? throw new ArgumentNullException(nameof(systemClock));
         }
-
-        public DbSet<Applicant> Applicants => Set<Applicant>();
-        public DbSet<User> Users => Set<User>();
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
